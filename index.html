@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تبدیل تاریخ شمسی به میلادی و محاسبه سن</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Vazir', sans-serif;
+            direction: rtl;
+            text-align: right;
+        }
+        .converter-card {
+            max-width: 400px;
+            margin: 50px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .card-header, .btn-custom {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="text-warning text-center">سایت مخصوص بچه های ۱۲ یک لیسه تجربوی</h1>
+
+    <div class="card converter-card">
+        <div class="card-header text-center">
+            <h3>تبدیل تاریخ شمسی به میلادی و محاسبه سن</h3>
+        </div>
+        <div class="card-body">
+            <form id="convertForm">
+                <div class="form-group">
+                    <label for="shamsiYear">سال شمسی</label>
+                    <input type="number" class="form-control" id="shamsiYear" placeholder="مثلاً ۱۴۰۲" required>
+                </div>
+                <div class="form-group">
+                    <label for="shamsiMonth">ماه شمسی</label>
+                    <input type="number" class="form-control" id="shamsiMonth" placeholder="مثلاً ۷" required>
+                </div>
+                <div class="form-group">
+                    <label for="shamsiDay">روز شمسی</label>
+                    <input type="number" class="form-control" id="shamsiDay" placeholder="مثلاً ۱۵" required>
+                </div>
+                <button type="button" class="btn btn-custom btn-block" onclick="convertToGregorian()">تبدیل کن</button>
+            </form>
+            <div id="result" class="mt-4 text-center"></div>
+            <h5 class="text-center">
+                <span class="text-danger">یا تشکری از</span>
+        بلوچ ،بایننس ،طبیعت ،لوله ای ،توپچه ،سوسن ،BTS ،خفن ،خوک ،شیثشیست ،سیگما ،طبیعت ۲ ،چین ،همایوون ،کلی ،خاری ،همستر ،دو جنسه و عمو جانی
+            </h5>
+        </div>
+        
+    </div>
+
+
+
+    <script>
+        function convertToGregorian() {
+            const shamsiYear = parseInt(document.getElementById("shamsiYear").value);
+            const shamsiMonth = parseInt(document.getElementById("shamsiMonth").value);
+            const shamsiDay = parseInt(document.getElementById("shamsiDay").value);
+
+            if (isNaN(shamsiYear) || isNaN(shamsiMonth) || isNaN(shamsiDay)) {
+                document.getElementById("result").innerHTML = '<div class="alert alert-danger">لطفاً تاریخ معتبر وارد کنید.</div>';
+                return;
+            }
+
+            const gYear = shamsiYear + 621;
+            const shamsiNewYear = new Date(shamsiYear, shamsiMonth - 1, shamsiDay);
+            const dayOfYear = Math.floor((shamsiNewYear - new Date(shamsiYear, 0, 1)) / (1000 * 60 * 60 * 24));
+            const march21 = new Date(gYear, 2, 21);
+            const gregorianDate = new Date(march21.getTime() + dayOfYear * (1000 * 60 * 60 * 24));
+
+            const gy = gregorianDate.getFullYear();
+            const gm = gregorianDate.getMonth() + 1;  
+            const gd = gregorianDate.getDate();
+
+            const today = new Date();
+            let age = today.getFullYear() - gy;
+            if (today.getMonth() + 1 < gm || (today.getMonth() + 1 === gm && today.getDate() < gd)) {
+                age--;
+            }
+
+            document.getElementById("result").innerHTML = `
+                <div class="alert alert-success">
+                    تاریخ میلادی معادل: ${gy}/${gm}/${gd} <br>
+                    سن شما: ${age} سال
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
